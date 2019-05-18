@@ -1,4 +1,5 @@
 import BaseSprite from "../view/component/BaseSprite";
+import { EGList } from "../view/component/EGList";
 
 /**
  * FairyGUI工具
@@ -24,7 +25,7 @@ export class FairyUtils {
 					// thisObject[disObj.name] = new fairui.ETab(disObj, thisObject);
 					// if (thisObject instanceof BaseSprite) thisObject.addComponent(thisObject[disObj.name]);
 				} else if (disObj.name && disObj.name.indexOf("eglist_") == 0 && disObj instanceof fairygui.GList) {
-					thisObject[disObj.name] = new fairui.EGList(disObj, thisObject);
+					thisObject[disObj.name] = new EGList(disObj, thisObject);
 					if (thisObject instanceof BaseSprite) thisObject.addComponent(thisObject[disObj.name]);
 				} else {
 					thisObject[disObj.name] = disObj;
@@ -32,7 +33,7 @@ export class FairyUtils {
 			}
 
 			for (let i: number = 0; i < parent._transitions.length; i++) {
-				let transObj: Transition;
+				let transObj: fairygui.Transition;
 				transObj = parent._transitions[i];
 				thisObject[transObj.name] = transObj;
 			}
