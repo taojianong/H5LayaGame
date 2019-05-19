@@ -25,25 +25,25 @@ export default class Global {
      */
     public static init():void{
 
-        Laya.init(1136, 640, Laya.WebGL);
-        laya.utils.Stat.show(0, 0);
-        //设置适配模式
-        Laya.stage.scaleMode = "showall";
-        Laya.stage.alignH = "left";
-        Laya.stage.alignV = "top";
-        //设置横竖屏
-        Laya.stage.screenMode = Global.screenMode;// "horizontal";
+        // Laya.init(1136, 640, Laya.WebGL);
+        // laya.utils.Stat.show(0, 0);
+        // //设置适配模式
+        // Laya.stage.scaleMode = "showall";
+        // Laya.stage.alignH = "left";
+        // Laya.stage.alignV = "top";
+        // //设置横竖屏
+        // Laya.stage.screenMode = Global.screenMode;// "horizontal";
 
-        //根据IDE设置初始化引擎		
-		if (window["Laya3D"]){
-            Laya3D.init(Global.width, Global.height);
-        }else{
-            Laya.init(Global.width, Global.height, Laya["WebGL"]);
-        } 
-		Laya["Physics"] && Laya["Physics"].enable();
-		Laya["DebugPanel"] && Laya["DebugPanel"].enable();
-		Laya.stage.scaleMode = Global.scaleMode;
-		Laya.stage.screenMode = Global.screenMode;
+        // //根据IDE设置初始化引擎		
+		// if (window["Laya3D"]){
+        //     Laya3D.init(Global.width, Global.height);
+        // }else{
+        //     Laya.init(Global.width, Global.height, Laya["WebGL"]);
+        // } 
+		// Laya["Physics"] && Laya["Physics"].enable();
+		// Laya["DebugPanel"] && Laya["DebugPanel"].enable();
+		// Laya.stage.scaleMode = Global.scaleMode;
+		// Laya.stage.screenMode = Global.screenMode;
 		//兼容微信不支持加载scene后缀场景
         //Laya.URL.exportSceneToJson = Global.exportSceneToJson;
         

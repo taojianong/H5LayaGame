@@ -75,7 +75,6 @@ declare module fairygui.display {
 }
 declare module fairygui.display {
     class Frame {
-        rect: laya.maths.Rectangle;
         addDelay: number;
         texture: laya.resource.Texture;
         constructor();
@@ -84,8 +83,6 @@ declare module fairygui.display {
 declare module fairygui.display {
     class Image extends laya.display.Sprite {
         constructor();
-        tex: laya.resource.Texture;
-        scaleTexture(x: number, y: number): void;
         scale9Grid: laya.maths.Rectangle;
         scaleByTile: boolean;
         tileGridIndice: number;
@@ -105,7 +102,6 @@ declare module fairygui.display {
         constructor();
         frames: Array<Frame>;
         frameCount: number;
-        boundsRect: laya.maths.Rectangle;
         frame: number;
         playing: boolean;
         smoothing: boolean;
@@ -303,7 +299,7 @@ declare module fairygui {
         childrenRenderOrder: number;
         apexIndex: number;
         mask: laya.display.Sprite;
-       	setMask(value: laya.display.Sprite, reversed: boolean): void;
+        setMask(value: laya.display.Sprite, reversed: boolean): void;
         protected updateHitArea(): void;
         protected updateMask(): void;
         protected setupScroll(scrollBarMargin: Margin, scroll: number, scrollBarDisplay: number, flags: number, vtScrollBarRes: string, hzScrollBarRes: string, headerRes: string, footerRes: string): void;
@@ -1148,6 +1144,8 @@ declare module fairygui {
         static defaultScrollBarDisplay: number;
         static defaultScrollTouchEffect: boolean;
         static defaultScrollBounceEffect: boolean;
+        static defaultScrollSnappingThreshold: number;
+        static defaultScrollPagingThreshold: number;
         static popupMenu: string;
         static popupMenu_seperator: string;
         static loaderErrorSign: string;
@@ -1301,7 +1299,7 @@ declare module fairygui.utils {
         scaleX: number;
         scaleY: number;
         constructor(data: fairygui.utils.PixelHitTestData, offsetX: number, offsetY: number);
-        isHit(x: number, y: number):boolean;
+        contains(x: number, y: number):boolean;
     }
 }
 

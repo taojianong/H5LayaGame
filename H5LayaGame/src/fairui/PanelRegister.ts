@@ -16,8 +16,8 @@ export default class PanelRegister {
      */
     public static registerClass(pkgName: string, resName: string, cls: any): void {
 
-        if (pkgName && !fairygui.UIPackage.getById(pkgName)) {
-            fairygui.UIPackage.addPackage(pkgName);
+        if (pkgName && !fairygui.UIPackage.getById("res/fairui/"+pkgName)) {
+            fairygui.UIPackage.addPackage("res/fairui/"+pkgName);
         }
         let url: string = fairygui.UIPackage.getItemURL(pkgName, resName);
         fairygui.UIObjectFactory.setPackageItemExtension(url, cls);

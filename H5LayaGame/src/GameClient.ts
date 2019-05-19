@@ -13,6 +13,9 @@ export default class GameClient extends Laya.Sprite {
     constructor() {
 
         super(); 
+    }
+
+    public init():void{
 
         Laya.stage.addChild(fairygui.GRoot.inst.displayObject);
 
@@ -26,12 +29,13 @@ export default class GameClient extends Laya.Sprite {
 
     private onLoaded():void{
 
-		fairygui.UIPackage.addPackage("res/fairui/common");		
+		// fairygui.UIPackage.addPackage("res/fairui/common");		
         // fairygui.UIConfig.defaultFont = "Microsoft YaHei";
         // fairygui.UIConfig.verticalScrollBar = "ui://Basic/ScrollBar_VT";
         // fairygui.UIConfig.horizontalScrollBar = "ui://Basic/ScrollBar_HZ";
         // fairygui.UIConfig.popupMenu = "ui://Basic/PopupMenu";
 
+        
         PanelRegister.registerClass("common", "EButton", EButton );
         
         FairyUIManager.init( Laya.stage );
