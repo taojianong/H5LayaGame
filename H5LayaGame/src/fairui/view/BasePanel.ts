@@ -1,4 +1,4 @@
-import { View } from "./View";
+import View from "./View";
 import EButton from "./component/EButton";
 import { FairyUtils } from "../utils/FairyUtils";
 import FairyUIManager from "../manager/FairyUIManager";
@@ -44,6 +44,8 @@ export class BasePanel extends View {
     protected constructFromXML(xml: any): void {
 
         super.constructFromXML(xml);
+
+        FairyUtils.setVar(this, this);
     }
 
     public init(): void {

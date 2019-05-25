@@ -1,8 +1,10 @@
+import EventManager from "../manager/EventManager";
+
 /**
  * 事件池
  * @author clong 2019.4.20
  */
-class EventPool {
+export default class EventPool {
 
 	private static pool:Array<EventPool> = [];
 

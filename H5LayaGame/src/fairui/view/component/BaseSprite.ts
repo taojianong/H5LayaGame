@@ -1,5 +1,5 @@
-import { FairyUtils } from "../../utils/FairyUtils";
 import Global from "../../../Global";
+import EventPool from "../../../com/events/EventPool";
 
 /**
  * fairygui原件基类
@@ -42,8 +42,6 @@ export default class BaseSprite extends fairygui.GComponent implements IComponen
         super.constructFromXML(xml);
 
         this.initController();
-        
-        FairyUtils.setVar(this, this);
     }
 
     /**初始化控制器 */

@@ -1,4 +1,4 @@
-import { UIComponent } from "../UIComponent";
+import  UIComponent  from "../UIComponent";
 
 /**
   * 列表渲染条目

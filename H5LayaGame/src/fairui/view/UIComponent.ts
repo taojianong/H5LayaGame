@@ -4,7 +4,7 @@ import BaseSprite from "./component/BaseSprite";
   * UI显示代理类
   * @author clong 2019.5.18
   */
-export class UIComponent extends BaseSprite {
+export default class UIComponent extends BaseSprite {
 
 	/**是否打开过界面 */
 	protected isOpened: boolean = false;

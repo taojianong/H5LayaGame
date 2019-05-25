@@ -1,10 +1,10 @@
-import { UIComponent } from "./UIComponent";
+import UIComponent  from "./UIComponent";
 
 /**
  * View基类
  * @author clong 2019.5.18
  */
-export class View extends UIComponent implements IView {
+export default class View extends UIComponent implements IView {
 
 	/**资源可释放后缓存时间,毫秒 */
 	public static readonly CACHE_TIME: number = 5000;

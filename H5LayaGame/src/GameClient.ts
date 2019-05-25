@@ -13,6 +13,8 @@ export default class GameClient extends Laya.Sprite {
     constructor() {
 
         super(); 
+
+        this.init();
     }
 
     public init():void{

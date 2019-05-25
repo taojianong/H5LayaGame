@@ -1,5 +1,6 @@
 import Resource from "./Resource";
 import { LoaderManager } from "../LoadSourceManager";
+import Log from "../../log/Log";
 
 /**
  * 组资源
@@ -31,7 +32,7 @@ export default class GroupResource extends Resource {
             let isBreak:boolean = false;
             let res:Resource;
             for( res of this._list ){
-                if( res && res.getRes( false ) == null ){
+                if( res && res.getRes( false ) == null ){                    
                     LoaderManager.load( res.url );
                     if(!isBreak){
                         isBreak = true;

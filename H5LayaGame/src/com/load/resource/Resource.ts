@@ -1,6 +1,4 @@
 import LoadUtils from "../utils/LoadUtils";
-import TxtResource from "./TxtResource";
-import GroupResource from "./GroupResource";
 import { LoaderManager } from "../LoadSourceManager";
 
 /**
@@ -23,25 +21,25 @@ export default class Resource implements IResource {
     /**组资源 */
     public static readonly TYPE_GROUP:string = "group";
 
-    public static create( url:any , complete:Laya.Handler = null , progress:Laya.Handler = null , error:Laya.Handler = null ):any{
+    // public static create( url:any , complete:Laya.Handler = null , progress:Laya.Handler = null , error:Laya.Handler = null ):any{
 
-        let res:Resource = null;
-        let ext:string = LoadUtils.getFileExt( url );
-        if( ext == "png" || ext == "jpg" || ext == "bmp" ){
-            res = Laya.Pool.getItemByClass( Resource.KEY , Resource );
-            res.type = Laya.Loader.IMAGE;
-        }else if( ext == "txt" || ext == "json" ){
-            res = Laya.Pool.getItemByClass( TxtResource.KEY , TxtResource );
-            res.type = Laya.Loader.TEXT;
-        }else if( url instanceof Array){
-            res = Laya.Pool.getItemByClass( GroupResource.KEY , GroupResource );
-            res.type = Resource.TYPE_GROUP;
-        }
-        if(res){
-            res.create( url , complete , progress , error );
-        }
-        return res;
-    }
+    //     let res:Resource = null;
+    //     let ext:string = LoadUtils.getFileExt( url );
+    //     if( ext == "png" || ext == "jpg" || ext == "bmp" ){
+    //         res = Laya.Pool.getItemByClass( Resource.KEY , Resource );
+    //         res.type = Laya.Loader.IMAGE;
+    //     }else if( ext == "txt" || ext == "json" ){
+    //         res = Laya.Pool.getItemByClass( TxtResource.KEY , TxtResource );
+    //         res.type = Laya.Loader.TEXT;
+    //     }else if( url instanceof Array){
+    //         res = Laya.Pool.getItemByClass( GroupResource.KEY , GroupResource );
+    //         res.type = Resource.TYPE_GROUP;
+    //     }
+    //     if(res){
+    //         res.create( url , complete , progress , error );
+    //     }
+    //     return res;
+    // }
 
     /**
      * 回收资源

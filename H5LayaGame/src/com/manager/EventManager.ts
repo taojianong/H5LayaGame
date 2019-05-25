@@ -1,12 +1,20 @@
+import Log from "../log/Log";
+
 /**
  * 事件管理类
  * @author clong 2019.5.18
  */
-class EventManager {
+export default class EventManager {
 
-	private static _eventDict: Laya.WeakObject = new Laya.WeakObject();
+	private static _eventDict: Laya.WeakObject = null;
 
-	private static _targetMap: Laya.WeakObject = new Laya.WeakObject();
+	private static _targetMap: Laya.WeakObject = null;
+
+	public static init(): void{
+
+		this._eventDict = new Laya.WeakObject();
+		this._targetMap = new Laya.WeakObject();
+	}
 
 	/**
 	 * 触发全局事件
@@ -22,11 +30,11 @@ class EventManager {
 			if (length > 0) {
 				for (let i: number = 0; i < length; i++) {
 					try {
-						console.log("[log][EventManager] 调度事件: " + type);//调度事件出错.
+						Log.log( this , "调度事件: " + type);//调度事件出错.
 						list[i][0].apply(list[i][1], args);
 					}
 					catch (e) {
-						console.error("[log][EventManager] 调度事件出错.", e);//调度事件出错.
+						Log.error( this , "调度事件出错."+e.toString() );//调度事件出错.
 					}
 				}
 			}

@@ -1,6 +1,10 @@
 import Resource from "./resource/Resource";
 import LoaderEvent from "./event/LoaderEvent";
 import GroupResource from "./resource/GroupResource";
+import LoadUtils from "./utils/LoadUtils";
+import TxtResource from "./resource/TxtResource";
+import EventManager from "../manager/EventManager";
+import Log from "../log/Log";
 
 /**
  * 加载资源管理
@@ -9,14 +13,17 @@ import GroupResource from "./resource/GroupResource";
 export default class LoadSourceManager {
 
     /**加载资源管理 */
-    private static loadMap:Laya.WeakObject = new Laya.WeakObject();
+    private static loadMap:Laya.WeakObject = null;
     /**资源组字典 */
-    private static groupMap:Laya.WeakObject = new Laya.WeakObject();
+    private static groupMap:Laya.WeakObject = null;
 
     /**
      * 初始化
      */
     public static init():void{
+
+        LoadSourceManager.loadMap = new Laya.WeakObject();
+        LoadSourceManager.groupMap = new Laya.WeakObject();
 
         EventManager.addEventListener( LoaderEvent.LOAD_SINGLE_COMPLETE , this.loadSingleComplete , this );
         EventManager.addEventListener( LoaderEvent.LOAD_GROUP_COMPLETE , this.loadGroupComplete , this );
@@ -70,19 +77,42 @@ export default class LoadSourceManager {
             if( urllist != null && urllist.length > 0 ){
                 for(let i=0;i<urllist.length;i++){
                     let url:string = urllist[i];
-                    let res:Resource = this.loadMap.get( url ) || Resource.create( url );
+                    let res:Resource = this.loadMap.get( url ) || LoadSourceManager.create( url );
                     grouplist.push( res );
                     this.loadMap.set( res.url , res );
                 }
             }
 
-            let groupRes:GroupResource = Resource.create( grouplist , complete , progress  );
+            let groupRes:GroupResource = LoadSourceManager.create( grouplist , complete , progress  );
             groupRes.load();
             this.groupMap.set( groupName , groupRes );
         }else{
             Laya.Log.print( "已经有该资源组了！" );
         }
+    }public static create( url:any , complete:Laya.Handler = null , progress:Laya.Handler = null , error:Laya.Handler = null ):any{
+
+        let res:Resource = null;
+        let ext:string = typeof url === "string" ? LoadUtils.getFileExt( url ) : "";
+        if( url instanceof Array){
+            res = Laya.Pool.getItemByClass( GroupResource.KEY , GroupResource );
+            res.type = Resource.TYPE_GROUP;
+        }else if( ext == "png" || ext == "jpg" || ext == "bmp" ){
+            res = Laya.Pool.getItemByClass( Resource.KEY , Resource );
+            res.type = Laya.Loader.IMAGE;
+        }else if( ext == "txt" || ext == "json" ){
+            res = Laya.Pool.getItemByClass( TxtResource.KEY , TxtResource );
+            res.type = Laya.Loader.TEXT;
+        }else{//二进制
+            res = Laya.Pool.getItemByClass( Resource.KEY , Resource );
+            res.type = Laya.Loader.BUFFER;
+        }
+        if(res){
+            res.create( url , complete , progress , error );
+        }
+        return res;
     }
+
+
 
     /**
      * 加载资源
@@ -99,7 +129,7 @@ export default class LoadSourceManager {
             if( res != null ){
                 return;
             }
-            res = Resource.create( source , complete , error );
+            res = LoadSourceManager.create( source , complete , error );
         }else if( source instanceof Resource ){            
             res = source;
         }
@@ -204,7 +234,8 @@ export class LoaderManager{
                     return;
                 }
                 this.loadingList.push( res );
-                Laya.loader.load( {url:res.url,type:res.type} , Laya.Handler.create( this , this.onLoaded , [res] , true  )  , res.progress  );
+                Log.log( this , "开始加载资源 url: "+ res.url , Log.TYPE_LOAD );//打印日志
+                Laya.loader.load( [{url:res.url,type:res.type}] , Laya.Handler.create( this , this.onLoaded , [res] , true  )  , res.progress  );
             }else if( this.readyLoadList.indexOf( res ) == -1 ){
                 this.readyLoadList.push( res );
                 //这里根据优先级排序
@@ -221,6 +252,7 @@ export class LoaderManager{
         if( index != -1 ){
             this.loadingList.splice( index , 1 );
         }
+        Log.log( this , "加载资源 url：" + res.url + "完成。" , Log.TYPE_LOAD );
         EventManager.dispatchEvent( LoaderEvent.LOAD_SINGLE_COMPLETE , res );
 
         this.loadNext();
