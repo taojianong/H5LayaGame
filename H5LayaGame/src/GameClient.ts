@@ -3,6 +3,7 @@ import PanelRegister from "./fairui/PanelRegister";
 import EButton from "./fairui/view/component/EButton";
 import LoadSourceManager, { LoaderManager } from "./com/load/LoadSourceManager";
 import UrlUtils from "./com/load/utils/UrlUtils";
+import UIGMView from "./fairui/panel/UIGMView";
 
 /**
  * 游戏主客户端
@@ -36,10 +37,12 @@ export default class GameClient extends Laya.Sprite {
         // fairygui.UIConfig.verticalScrollBar = "ui://Basic/ScrollBar_VT";
         // fairygui.UIConfig.horizontalScrollBar = "ui://Basic/ScrollBar_HZ";
         // fairygui.UIConfig.popupMenu = "ui://Basic/PopupMenu";
+        fairygui.UIConfig.packageFileExtension = "map";
 
+        FairyUIManager.init( Laya.stage );
         
         PanelRegister.registerClass("common", "EButton", EButton );
-        
-        FairyUIManager.init( Laya.stage );
+
+        FairyUIManager.open( UIGMView );
 	}
 }

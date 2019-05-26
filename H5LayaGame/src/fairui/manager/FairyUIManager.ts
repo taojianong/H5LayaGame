@@ -1,6 +1,8 @@
 import PanelRegister from "../PanelRegister";
 import EButton from "../view/component/EButton";
 import BaseSprite from "../view/component/BaseSprite";
+import Log from "../../com/log/Log";
+import { BasePanel } from "../view/BasePanel";
 
 /**
  * Fairygui管理
@@ -53,6 +55,27 @@ export default class FairyUIManager {
         fairygui.GRoot.inst.addChild(FairyUIManager.topLayer);			
         fairygui.GRoot.inst.addChild(FairyUIManager.tipLayer);
         fairygui.GRoot.inst.addChild(FairyUIManager.guideLayer);
+    }
+
+    /**
+     * 打开面板
+     * @param cls 面板类
+     */
+    public static open( cls:any ):void{
+
+        if( cls != null ){
+            try{
+                let view:any = new cls();
+                if( view instanceof BasePanel ){
+                    view.load();      
+                    if( view.panelVo.isNormal ){
+                        this.windowLayer.addChild( view );
+                    }              
+                }
+            }catch(e){
+                Log.error( this , "实列面板失败！");
+            }
+        }
     }
 
     private static instance: FairyUIManager;

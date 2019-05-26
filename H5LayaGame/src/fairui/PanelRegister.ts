@@ -9,18 +9,29 @@ export default class PanelRegister {
     }
 
     /**
+     * 
+     * @param pkgName 是否已注册资源包
+     */
+    public static hasRegisterClass( pkgName:string ):boolean{
+
+        return pkgName && !fairygui.UIPackage.getById("res/fairui/"+pkgName);
+    }
+
+    /**
      * 注册组件类与fairygui编辑器中类对应
      * @param pkgName 包名
      * @param resName 资源名
-     * @param cls	  对应包中类名	
+     * @param cls	  对应包中类名	,为null则只注册资源包
      */
-    public static registerClass(pkgName: string, resName: string, cls: any): void {
+    public static registerClass(pkgName: string, resName: string = "" , cls: any = null ): void {
 
         if (pkgName && !fairygui.UIPackage.getById("res/fairui/"+pkgName)) {
             fairygui.UIPackage.addPackage("res/fairui/"+pkgName);
         }
-        let url: string = fairygui.UIPackage.getItemURL(pkgName, resName);
-        fairygui.UIObjectFactory.setPackageItemExtension(url, cls);
+        if( cls ){
+            let url: string = fairygui.UIPackage.getItemURL(pkgName, resName);
+            fairygui.UIObjectFactory.setPackageItemExtension(url, cls);
+        }        
     }
 
     /**

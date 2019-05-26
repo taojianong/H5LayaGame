@@ -2,6 +2,10 @@ import View from "./View";
 import EButton from "./component/EButton";
 import { FairyUtils } from "../utils/FairyUtils";
 import FairyUIManager from "../manager/FairyUIManager";
+import PanelVo from "../vo/PanelVo";
+import LoadSourceManager from "../../com/load/LoadSourceManager";
+import UrlUtils from "../../com/load/utils/UrlUtils";
+import PanelRegister from "../PanelRegister";
 
 /**
  * 面板基类
@@ -17,11 +21,14 @@ export class BasePanel extends View {
     /**关闭按钮:取这个名字的按钮,会根据屏幕大小调整位置 */
     protected btn_close: fairygui.GButton | EButton;
     /**传 false 表示不绑定点击遮罩关闭面板事件 */
-    protected openTapMask: boolean;
-    /**包名 */
-    protected _pkgName: string = "";
-    /**类名 */
-    protected _resName: string = "";
+    // protected openTapMask: boolean;
+    // /**包名 */
+    // protected _pkgName: string = "";
+    // /**类名 */
+    // protected _resName: string = "";
+    
+    /**面板数据 */
+    protected _panelVo:PanelVo = null;
 
     /**
      * 面板基类
@@ -32,31 +39,47 @@ export class BasePanel extends View {
 
         super();
 
-        if (pkgName && !fairygui.UIPackage.getById(pkgName)) {
-            fairygui.UIPackage.addPackage(pkgName);
-        }
-        this._pkgName = pkgName;
-        this._resName = resName;
+        this._panelVo = new PanelVo();
+        this._panelVo.pkgName = pkgName;
+        this._panelVo.resName = resName;
 
-        this.init();
+        this.load();
     }
 
     protected constructFromXML(xml: any): void {
 
         super.constructFromXML(xml);
 
-        FairyUtils.setVar(this, this);
+        //FairyUtils.setVar(this, this);
+    }
+
+    /**
+     * 加载资源
+     */
+    public load():void{
+
+        let urls:Array<string> = UrlUtils.getFairyGroup( "common" );
+        LoadSourceManager.loadGroup( "common" , urls , Laya.Handler.create( this , this.init ) );
+    }
+
+    /**面板数据 */
+    public get panelVo():PanelVo{
+
+        return this._panelVo;
     }
 
     public init(): void {
 
-        this.openTapMask = true;
+        // if ( this._panelVo.pkgName && !fairygui.UIPackage.getById(this._panelVo.pkgName)) {
+        //     fairygui.UIPackage.addPackage(this._panelVo.pkgName);
+        // }
+        PanelRegister.registerClass( this._panelVo.pkgName );
 
-        if (this._pkgName && this._resName) {
-            let obj: any = fairygui.UIPackage.createObject(this._pkgName, this._resName);
-            this.view = obj.asCom;
-            this.addChild(this.view);
-        }
+        // this._panelVo.openTapMask = true;
+
+        let obj: any = fairygui.UIPackage.createObject( this._panelVo.pkgName, this._panelVo.resName );
+        this.view = obj.asCom;
+        this.addChild(this.view);
 
         FairyUtils.setVar(this.view, this);
 
@@ -189,5 +212,9 @@ export class BasePanel extends View {
 
         this.view = null;
         this._data = null;
+        if( this._panelVo != null ){
+            this._panelVo.dispose();
+        }
+        this._panelVo = null;
     }
 }

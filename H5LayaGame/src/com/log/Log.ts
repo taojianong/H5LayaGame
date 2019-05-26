@@ -51,6 +51,9 @@ export default class Log {
      */
     public static error( thisObject:any , text:string , type:string="" , level:number =0 ):void{
 
+        if( type == ""){
+            type = Log.TYPE_DEBUG;
+        }
         if( type && this.noshowLogTypeList.indexOf(type) != -1 ){
             return;
         }

@@ -26,6 +26,12 @@ export default class View extends UIComponent implements IView {
 
 	//------------------------------------------------
 
+	/**加载资源 */
+	public load():void{
+
+		this.init( null );
+	}
+
 	public init(param: any): void {
 		super.init(param);
 		this.gcTime = Number.MAX_VALUE;

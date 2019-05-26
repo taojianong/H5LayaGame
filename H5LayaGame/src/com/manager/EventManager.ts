@@ -23,7 +23,7 @@ export default class EventManager {
 	 */
 	public static dispatchEvent( type: string, ...args ):void {
 
-		let funcList: Array<any> = EventManager._eventDict.get(type);
+		let funcList: Array<any> = this._eventDict.get(type);
 		if (funcList) {
 			let list: Array<any> = funcList.concat();
 			let length: number = list.length;
@@ -31,7 +31,11 @@ export default class EventManager {
 				for (let i: number = 0; i < length; i++) {
 					try {
 						Log.log( this , "调度事件: " + type);//调度事件出错.
-						list[i][0].apply(list[i][1], args);
+						// list[i][0].apply(list[i][1], args);
+						let fun:Function = list[i][0];
+						if(  fun != null ){
+							fun.apply(list[i][1], args);
+						}
 					}
 					catch (e) {
 						Log.error( this , "调度事件出错."+e.toString() );//调度事件出错.
