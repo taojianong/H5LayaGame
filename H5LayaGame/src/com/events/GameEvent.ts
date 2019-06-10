@@ -2,7 +2,7 @@
  * 游戏事件
  * @author clong 2019.3.23
  */
-class GameEvent extends Laya.Event{
+export class GameEvent extends Laya.Event{
 
 	/**选择 */
 	public static SELECT:string = "GameEvent.select";

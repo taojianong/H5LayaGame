@@ -4,6 +4,7 @@ import EButton from "./fairui/view/component/EButton";
 import LoadSourceManager, { LoaderManager } from "./com/load/LoadSourceManager";
 import UrlUtils from "./com/load/utils/UrlUtils";
 import UIGMView from "./fairui/panel/UIGMView";
+import UIMainView from "./fairui/panel/UIMainView";
 
 /**
  * 游戏主客户端
@@ -43,6 +44,6 @@ export default class GameClient extends Laya.Sprite {
         
         PanelRegister.registerClass("common", "EButton", EButton );
 
-        FairyUIManager.open( UIGMView );
+        FairyUIManager.open( UIMainView );
 	}
 }

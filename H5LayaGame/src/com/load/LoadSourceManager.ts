@@ -85,13 +85,16 @@ export default class LoadSourceManager {
                 }
             }
 
-            if( this.groupMap[ groupName ] == null ){
-                let groupRes: GroupResource = LoadSourceManager.create(grouplist, complete, progress);
+            let groupRes: GroupResource = this.groupMap[ groupName ]; 
+            if( groupRes == null ){
+                groupRes = LoadSourceManager.create(grouplist, complete, progress);
                 groupRes.name = groupName;
                 groupRes.load();
                 this.groupMap[groupName] = groupRes;
             }else if( complete != null ){
-                complete.run();
+                if( groupRes.isLoaded() ){
+                    complete.run();
+                }                
             }            
         } else {
             Laya.Log.print("已经有该资源组了！");

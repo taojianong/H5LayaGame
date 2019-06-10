@@ -3,13 +3,13 @@
   <controller name="button" pages="0,normal,1,log" selected="0"/>
   <displayList>
     <image id="n0_ff9l" name="n0" src="my991k" fileName="images/common_diban03.png" xy="0,0" size="1280,720" locked="true"/>
-    <component id="n1_ff9l" name="btn_play" src="my994b" fileName="component/EButton.xml" xy="607,353" size="170,70">
-      <Button title="播放" icon="ui://1m7u0p69my9912" selectedIcon="ui://x0a8c270my9912"/>
+    <component id="n1_ff9l" name="btn_play" src="my994b" fileName="component/EButton.xml" xy="504,311" pivot="0.5,0.5" size="200,70">
+      <Button title="播放" icon="ui://1m7u0p69my9912" selectedIcon="ui://1m7u0p69my9912"/>
     </component>
     <component id="n2_ff9l" name="btn_close" src="my994b" fileName="component/EButton.xml" xy="1174,0" pivot="0.5,0.5" size="106,107">
       <Button icon="ui://x0a8c270my991a" selectedIcon="ui://x0a8c270my991a"/>
     </component>
-    <component id="n4_ff9l" name="n4" src="ff9l52" fileName="component/ETextArena.xml" xy="43,30" size="934,641">
+    <component id="n4_ff9l" name="n4" src="ff9l52" fileName="component/ETextArena.xml" xy="43,30" size="1199,641">
       <gearDisplay controller="button" pages="1"/>
     </component>
     <component id="n7_tke2" name="img_icon" src="my994p" fileName="component/UIBitmapIcon.xml" xy="340,196" size="176,176">

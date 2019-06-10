@@ -4,6 +4,7 @@ import Global from "../../../Global";
 import { UIEListRenderItem } from "./UIEListRenderItem";
 import BaseButton from "./BaseButton";
 import { FairyTextureUtils } from "../../utils/FairyTextureUtils";
+import { GameEvent } from "../../../com/events/GameEvent";
 
 
 /**
@@ -40,7 +41,6 @@ export class EGList extends BaseSprite {
 			this.callbackThisObj = thisObject || this;
 			// this.list.callbackThisObj = this;
 			this.list.itemRenderer = Laya.Handler.create( this , this.listItemRender );
-			// this.list.addEventListener(fairygui.ItemEvent.CLICK, this.clickItem, this);
 			this.list.on( Laya.Event.CLICK , this , this.clickItem );
 		}
 	}

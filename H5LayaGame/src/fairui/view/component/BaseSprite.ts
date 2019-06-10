@@ -115,20 +115,20 @@ export default class BaseSprite extends fairygui.GComponent implements IComponen
      * 添加Laya原生元件
      * @param child Laya原生显示对象
      */
-    public addEgretChild(child: Laya.Node): void {
+    public addLayaChild(child: Laya.Node): void {
 
         this._container.addChild(child);
     }
     /**添加Laya原生元件
      * @param child Laya原生显示对象
      */
-    public addEgretChildAt(child: Laya.Node, index: number): void {
+    public addLayaChildAt(child: Laya.Node, index: number): void {
         this._container.addChildAt(child, index);        
     }
     /**
      * 移除Laya原生元件
      */
-    public removeEgretChild(child: Laya.Node): void {
+    public removeLayaChild(child: Laya.Node): void {
 
         if (child && this._container.contains(child)) {
             this._container.removeChild(child);

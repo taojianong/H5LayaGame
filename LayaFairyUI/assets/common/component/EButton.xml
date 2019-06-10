@@ -5,8 +5,8 @@
     <loader id="n3_r7zm" name="icon" xy="0,0" size="50,30" fill="scaleFree">
       <relation target="" sidePair="width-width,height-height"/>
     </loader>
-    <richtext id="n4_ljmn" name="title" xy="20,-7" size="10,43" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" singleLine="true" text="">
-      <relation target="" sidePair="width-width,height-height"/>
+    <richtext id="n4_ljmn" name="title" xy="13,-4" pivot="0.5,0.5" size="23,39" fontSize="30" color="#ffffff" align="center" vAlign="middle" autoSize="none" singleLine="true" autoClearText="true" text="">
+      <relation target="" sidePair="width-width,middle-middle"/>
     </richtext>
   </displayList>
   <Button downEffect="scale" downEffectValue="0.90"/>

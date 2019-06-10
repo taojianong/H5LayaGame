@@ -3,7 +3,7 @@
  * 通用事件类
  * @author clong 2019.3.23
  */
-class EventObj {
+export class EventObj {
 
     private static pool:Array<EventObj> = [];
 

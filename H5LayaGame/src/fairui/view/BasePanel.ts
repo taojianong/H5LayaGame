@@ -6,6 +6,8 @@ import PanelVo from "../vo/PanelVo";
 import LoadSourceManager from "../../com/load/LoadSourceManager";
 import UrlUtils from "../../com/load/utils/UrlUtils";
 import PanelRegister from "../PanelRegister";
+import { EGList } from "./component/EGList";
+import { GameEvent } from "../../com/events/GameEvent";
 
 /**
  * 面板基类
@@ -58,8 +60,8 @@ export class BasePanel extends View {
      */
     public load():void{
 
-        let urls:Array<string> = UrlUtils.getFairyGroup( "common" );
-        LoadSourceManager.loadGroup( "common" , urls , Laya.Handler.create( this , this.init ) );
+        let urls:Array<string> = UrlUtils.getFairyGroup( this._panelVo.pkgName );
+        LoadSourceManager.loadGroup( this._panelVo.pkgName , urls , Laya.Handler.create( this , this.init ) );
     }
 
     /**面板数据 */
@@ -70,20 +72,34 @@ export class BasePanel extends View {
 
     public init(): void {
 
-        // if ( this._panelVo.pkgName && !fairygui.UIPackage.getById(this._panelVo.pkgName)) {
-        //     fairygui.UIPackage.addPackage(this._panelVo.pkgName);
-        // }
         PanelRegister.registerClass( this._panelVo.pkgName );
 
-        // this._panelVo.openTapMask = true;
+        if( this.view == null ){
+            let obj: any = fairygui.UIPackage.createObject( this._panelVo.pkgName, this._panelVo.resName );
+            this.view = obj.asCom;
+            this.addChild(this.view);
 
-        let obj: any = fairygui.UIPackage.createObject( this._panelVo.pkgName, this._panelVo.resName );
-        this.view = obj.asCom;
-        this.addChild(this.view);
+            FairyUtils.setVar(this.view, this);
 
-        FairyUtils.setVar(this.view, this);
+            let disObj: fairygui.GObject;
+            for (let i: number = 0; i < this.view.numChildren; i++) { //objects
+                disObj = this.view.getChildAt(i);
+                if (disObj.name == "icon" || disObj.name == "title") {
+                    continue;
+                }
+                if (disObj.name && disObj.name.indexOf("tab_") == 0 && disObj instanceof fairygui.GGroup) {
+                    // this[disObj.name] = new fairui.ETab(disObj, this);
+                    // this.addComponent(this[disObj.name]);
+                } else if (disObj.name && disObj.name.indexOf("eglist_") == 0 && disObj instanceof fairygui.GList) {
+                    this[disObj.name] = new EGList(disObj, this);
+                    this.addComponent(this[disObj.name]);
+                }
+            }
 
-        this.initUI();
+            this.initUI();
+        }
+        
+        this.initData(this.param);
 
         this.onResize();
     }
@@ -93,6 +109,11 @@ export class BasePanel extends View {
         // if (this.titleBar != null) {
         //     this.btn_close = this.titleBar.btn_close;
         // }
+    }
+
+    public initData( data:any ):void{
+
+        this.show( data );
     }
 
     public addAllListener(): void {
@@ -165,9 +186,14 @@ export class BasePanel extends View {
      * 显示
      */
     public show(data: any): void {
-        this.visible = true;
-        // super.show(data);//这句话一定要放在this.visible = true之后执行,不然面板事件注册不了  
-        this.initData(data);
+
+        this._data = data;
+        if( this.view == null ){
+            return;
+        }
+        this.visible = true; 
+
+        this.addAllListener();
     }
 
     /**

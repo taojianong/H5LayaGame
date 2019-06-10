@@ -57,7 +57,7 @@ export default class GroupResource extends Resource {
                     return false;
                 }
             }
-        }else{
+        }else if( !this._list ){
             return false;
         } 
         return true;

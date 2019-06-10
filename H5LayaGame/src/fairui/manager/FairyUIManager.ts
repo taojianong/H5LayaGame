@@ -59,15 +59,17 @@ export default class FairyUIManager {
 
     /**
      * 打开面板
-     * @param cls 面板类
+     * @param cls   面板类
+     * @param data  其他数据
      */
-    public static open( cls:any ):void{
+    public static open( cls:any , data:any = null ):void{
 
         if( cls != null ){
             try{
                 let view:any = new cls();
                 if( view instanceof BasePanel ){
                     view.load();      
+                    view.show( data );
                     if( view.panelVo.isNormal ){
                         this.windowLayer.addChild( view );
                     }              

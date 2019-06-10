@@ -1,4 +1,5 @@
 import EventManager from "../manager/EventManager";
+import { EventObj } from "./EventObj";
 
 /**
  * 事件池

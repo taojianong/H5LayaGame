@@ -68,6 +68,7 @@ export default class UIComponent extends BaseSprite {
 	  */
 	public initData(param: any = null): void {
 
+		this._data = param;
 	}
 
 	/**
