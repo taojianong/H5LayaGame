@@ -5,7 +5,7 @@
 interface IView extends IComponent{
 
 	/**加载初始化资源 */
-	load():void;
+	load( data:any ):void;
 	/**初始化界面 */
 	initUI():void;
 	/**初始化界面相关数据 */

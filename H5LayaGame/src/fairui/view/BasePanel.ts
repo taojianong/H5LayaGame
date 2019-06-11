@@ -8,6 +8,7 @@ import UrlUtils from "../../com/load/utils/UrlUtils";
 import PanelRegister from "../PanelRegister";
 import { EGList } from "./component/EGList";
 import { GameEvent } from "../../com/events/GameEvent";
+import { CommonUtils } from "../../com/utils/CommonUtils";
 
 /**
  * 面板基类
@@ -22,12 +23,8 @@ export class BasePanel extends View {
     // protected titleBar: TitleBar;
     /**关闭按钮:取这个名字的按钮,会根据屏幕大小调整位置 */
     protected btn_close: fairygui.GButton | EButton;
-    /**传 false 表示不绑定点击遮罩关闭面板事件 */
-    // protected openTapMask: boolean;
-    // /**包名 */
-    // protected _pkgName: string = "";
-    // /**类名 */
-    // protected _resName: string = "";
+    /**是否正在加载 */
+    protected isLoad:boolean = false;
     
     /**面板数据 */
     protected _panelVo:PanelVo = null;
@@ -44,8 +41,8 @@ export class BasePanel extends View {
         this._panelVo = new PanelVo();
         this._panelVo.pkgName = pkgName;
         this._panelVo.resName = resName;
-
-        this.load();
+        this._panelVo.clsName = CommonUtils.getQualifiedClassName( this );// typeof this;
+        // this.load();
     }
 
     protected constructFromXML(xml: any): void {
@@ -58,10 +55,16 @@ export class BasePanel extends View {
     /**
      * 加载资源
      */
-    public load():void{
+    public load( data:any ):void{
 
-        let urls:Array<string> = UrlUtils.getFairyGroup( this._panelVo.pkgName );
-        LoadSourceManager.loadGroup( this._panelVo.pkgName , urls , Laya.Handler.create( this , this.init ) );
+        if( this.view == null && !this.isLoad ){
+
+            this.isLoad = true;
+            let urls:Array<string> = UrlUtils.getFairyGroup( this._panelVo.pkgName );
+            LoadSourceManager.loadGroup( this._panelVo.pkgName , urls , Laya.Handler.create( this , this.init , [data] , true  ) );
+        }else{
+            this.init( data );
+        }
     }
 
     /**面板数据 */
@@ -70,38 +73,39 @@ export class BasePanel extends View {
         return this._panelVo;
     }
 
-    public init(): void {
+    public initComplete(): boolean {
 
-        PanelRegister.registerClass( this._panelVo.pkgName );
+		//检测初始化是否完成
+		if (!this.isInited()) {
+			return false;
+		}
 
-        if( this.view == null ){
-            let obj: any = fairygui.UIPackage.createObject( this._panelVo.pkgName, this._panelVo.resName );
-            this.view = obj.asCom;
-            this.addChild(this.view);
+		if (!this.isOpened) {
+			this.isOpened = true;
+			this.initUI();
+		}
 
-            FairyUtils.setVar(this.view, this);
+		// this.initData(this.param);
+		// this.addAllListener();
 
-            let disObj: fairygui.GObject;
-            for (let i: number = 0; i < this.view.numChildren; i++) { //objects
-                disObj = this.view.getChildAt(i);
-                if (disObj.name == "icon" || disObj.name == "title") {
-                    continue;
-                }
-                if (disObj.name && disObj.name.indexOf("tab_") == 0 && disObj instanceof fairygui.GGroup) {
-                    // this[disObj.name] = new fairui.ETab(disObj, this);
-                    // this.addComponent(this[disObj.name]);
-                } else if (disObj.name && disObj.name.indexOf("eglist_") == 0 && disObj instanceof fairygui.GList) {
-                    this[disObj.name] = new EGList(disObj, this);
-                    this.addComponent(this[disObj.name]);
-                }
-            }
+		this.isComplyed = true;
+		return true;
+	}
 
-            this.initUI();
-        }
+    public init( data:any ): void {
+
+        super.init( data );
+
+        this.isLoad = false;
+
+        // if( this.view == null ){
+
+        //     this.initUI();
+        // }
         
         this.initData(this.param);
 
-        this.onResize();
+        // this.onResize();
     }
 
     public initUI(): void {
@@ -109,6 +113,28 @@ export class BasePanel extends View {
         // if (this.titleBar != null) {
         //     this.btn_close = this.titleBar.btn_close;
         // }
+        PanelRegister.registerClass( this._panelVo.pkgName );
+
+        let obj: any = fairygui.UIPackage.createObject( this._panelVo.pkgName, this._panelVo.resName );
+        this.view = obj.asCom;
+        this.addChild(this.view);
+
+        FairyUtils.setVar(this.view, this);
+
+        let disObj: fairygui.GObject;
+        for (let i: number = 0; i < this.view.numChildren; i++) { //objects
+            disObj = this.view.getChildAt(i);
+            if (disObj.name == "icon" || disObj.name == "title") {
+                continue;
+            }
+            if (disObj.name && disObj.name.indexOf("tab_") == 0 && disObj instanceof fairygui.GGroup) {
+                // this[disObj.name] = new fairui.ETab(disObj, this);
+                // this.addComponent(this[disObj.name]);
+            } else if (disObj.name && disObj.name.indexOf("eglist_") == 0 && disObj instanceof fairygui.GList) {
+                this[disObj.name] = new EGList(disObj, this);
+                this.addComponent(this[disObj.name]);
+            }
+        }
     }
 
     public initData( data:any ):void{
@@ -120,7 +146,7 @@ export class BasePanel extends View {
 
         super.addAllListener();
         if (this.btn_close != null) {
-            this.addGameListener(Laya.Event.CLICK, this.closeHandler, this.btn_close);
+            this.addGameListener(Laya.Event.CLICK, this.closeHandler, this , this.btn_close);
         }
         this.addGameListener(GameEvent.STGAE_RESIZE, this.onResize, this);
     }
@@ -165,7 +191,7 @@ export class BasePanel extends View {
      */
     public close(isHideGuide: boolean = true): void {
 
-        // FairyUIManager.closePanel(this, this.canDispose);
+        FairyUIManager.close( this );
     }
 
     /**
@@ -194,6 +220,8 @@ export class BasePanel extends View {
         this.visible = true; 
 
         this.addAllListener();
+
+        this.onResize();
     }
 
     /**
